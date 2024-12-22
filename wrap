@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+width=30
+command="fmt"
+buffer=""
+[[ -n "$1" ]] && width=$1
+[[ -n "$2" ]] && command=$2
+
+while IFS= read -r line; do
+  if [[ -z "$line" && "${#buffer}" -ne 0 ]]; then
+    printf '%s\n' "$buffer" | $command -w "$width"
+    printf "\n"
+    buffer=""
+  elif [[ "${#buffer}" -eq 0 && "${#line}" -lt "$width" ]]; then
+    printf '%s\n' "$line"
+  else
+    buffer+="$line"
+    buffer+=" "
+  fi
+done
+printf '%s' "$buffer" | $command -w "$width"

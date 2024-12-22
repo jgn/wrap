@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+for f in $(ls -1 test*.md); do
+  expected=$f-expected
+  result=/tmp/$f-result
+  ../wrap <"$f" >$result
+  if ! cmp -s "$expected" "$result"; then
+    printf '%s\n' "not the same: $expected and $result"
+  fi
+done
